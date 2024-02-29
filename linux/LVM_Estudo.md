@@ -1,4 +1,4 @@
-# Passo a passo para trabalhar com o LVM
+## Passo a passo para trabalhar com o LVM
 Para trabalhar com o LVM, você precisa inicializar os discos para o LVM, depois criar pelo menos um grupo de Volumes, criar pelo menos um volume lógico no grupo que acabou de criar, formatar o volume com o sistema de arquivos desejado e por último montá-lo.
 
 Resumidamente, é preciso fazer os seguintes passos:
@@ -10,7 +10,7 @@ Ativar um volume group com o comando vgchange;
 Criar um volume lógico com o comando lvcreate;
 Formatar o volume lógico com o sistema de arquivos desejado com o mkfs.
 Montar o volume lógico com o mount.
-# Criando partições LVM
+## Criando partições LVM
 Se você não deseja utilizar todo o disco como LVM, pode usar o fdisk para criar uma ou mais partições tipo LVM. Para criar uma partição LVM com o fdisk, você cria a partição normalmente e altera o tipo dela para 8e.
 
 Para exemplificar, imaginemos que  o sistema foi instalado no disco /dev/sda.
@@ -18,11 +18,11 @@ Para exemplificar, imaginemos que  o sistema foi instalado no disco /dev/sda.
 E para o LVM serão utilizados mais dois discos:  /dev/sdb e /dev/sdc que não estão particionados.
 
 Antes de adicionar um disco ou partição como um volume físico do LVM é preciso inicializá-lo com o comando pvcreate.
-# Caso precise formatar :
+## Caso precise formatar :
 ```
 mkfs.ext4 /dev/sdb
 ```
-# Inicializando volumes físicos
+## Inicializando volumes físicos
 Para inicializar volumes físicos de discos inteiros o comando é: pvcreate e o caminho completo da partição ou disco:
 
 ```
@@ -33,14 +33,14 @@ Para inicializar volumes físicos de discos inteiros o comando é: pvcreate e o 
 # pvcreate /dev/sdc
 ```
 Physical volume “/dev/sdc” successfully created
-# Criando um volume group
+## Criando um volume group
 Depois de inicializar os discos, é preciso criar um grupo de volume com os discos com o comando vgcreate:
 
 ```
 # vgcreate meuvolume /dev/sdb /dev/sdc
 ```
   Volume group “meuvolume” successfully created
-# Ativando um volume group
+## Ativando um volume group
 Após criar o volume group, é necessário ativá-lo com o comando vgchange:
 
 ```
@@ -49,7 +49,7 @@ Após criar o volume group, é necessário ativá-lo com o comando vgchange:
   0 logical volume(s) in volume group “meuvolume” now active
 Após o reboot do sistema é necessário ativar o volume group novamente. Então, faz-se necessário incluir esse comando nos scripts de carga do sistema.
 
-# Criando volumes lógicos
+## Criando volumes lógicos
 O comando lvcreate cria volumes lógicos. No exemplo será criado  um volume lógico de 1GB chamado logico1 no volume meuvolume:
 
 ```
@@ -62,7 +62,7 @@ Como no nosso exmplo os discos  /dev/sdb e /dev/sdc têm 2GB cada um, é possív
 # lvcreate -L 4000 -n logico1 meuvolume
 ```
   Logical volume “logico1” created
-# Ativando o volume lógico
+## Ativando o volume lógico
 O comando lvchange ativa / desativa o volume lógico para uso:
 
 Para ATIVAR:
@@ -75,7 +75,7 @@ Para DESATIVAR:
 ```
 # lvchange -a n /dev/meuvolume/logico1
 ```
-# Formatando o volume lógico
+## Formatando o volume lógico
 Qualquer sistema de arquivos pode ser usado para formatar o volume lógico:
 
 ```
@@ -94,7 +94,7 @@ Após esses passos o volume lógico estará pronto para uso.
 
 Você também pode usar o LVM para aumentar ou diminuir o tamanho de um volume.
 
-# Aumentando o tamanho do volume com um disco novo
+## Aumentando o tamanho do volume com um disco novo
 Primeiro é necessário criar o volume físico:
 
 ```
